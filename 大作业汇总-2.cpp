@@ -1231,6 +1231,14 @@ int main(int argc, char* argv[]) {
         //新修改
         cout << "*******************************瞬态分析*******************************" << endl;
         
+        double a[8] = { 0.5000, 0.4799, 0.9047, 0.6099, 0.6177, 0.8594, 0.8055, 0.5767 };
+        double result_0[30] = { 0 };
+        double ratio = 0;
+        double delta[30] = { 0 };
+        double Gleak = 1e-3;
+        double path1, lambda = 0;
+
+
         int Capacitor_count = 0;
         Component* comPtr1 = compList.getComp(0);
         while (comPtr1){
@@ -1253,144 +1261,35 @@ int main(int argc, char* argv[]) {
         cin >> h;
         cout << "请输入结束时间：" << endl;
         cin >> stop_time;
-        cout << "输入精度:" << endl;
+        /*cout << "输入精度:" << endl;
         double accurateValue;
-        cin >> accurateValue;
+        cin >> accurateValue;*/
         cout << "输入初始节点个数：" << endl;
         int number1 = 0;
         cin >> number1;
-        cout << "输入初始节点数值:" << endl;
-        for (int i = 0; i < number1; i++) {        //   case1带入的8个数值 0.7103 0.6725 10.0 0.7103 1.5 10.0 -0.0046 -0.0021
-            cin >> nodeValue[i + 1];
+        //cout << "输入初始节点数值:" << endl;
+        //for (int i = 0; i < number1; i++) {        //   case1带入的8个数值 0.7103 0.6725 10.0 0.7103 1.5 10.0 -0.0046 -0.0021
+        //    cin >> nodeValue[i + 1];               // 0.5000 0.4799 0.9047 0.6099 0.6177 0.8594 0.8055 0.5767
+        //}
+        for (int i = 0; i < number1; i++) {
+
+            nodeValue[i + 1] = a[i];
+
         }
+
         int h_count = stop_time / h;
         for (int i = 0; i < h_count; i++) {
             for (int j = 0; j < Capacitor_count; j++) {
                 //
                 Uk[j] = Vs[j][i];                            //定义在头文件U(k)
             }
+          
                 int number = number1;
-                double delta[30] = { 0 };                  //根据N-R公式，保存雅可比矩阵的逆 乘 f(x)的结果
+                for (lambda = 0; lambda < 1; lambda += 0.01) {
+                    for (int i = 1; i <= number; i++) {
+                        result[i] = 0;
 
-            
-            //cout << "输入初始节点数值:" << endl;
-            //for (int i = 0; i < number; i++) {        //   case1带入的8个数值 0.7103 0.6725 10.0 0.7103 1.5 10.0 -0.0046 -0.0021
-            //    cin >> nodeValue[i + 1];              //      0.71  0.67  10   0.71  1.5  10  -0.004  -0.002
-            //}                                          //     0.7   0.6  10  0.7 1.5 10 
-
-                nodePtr = nodeList.getNode(0);
-                while (nodePtr != NULL) {
-                    if (nodePtr->getNameNum() != datum) {
-                        nodePtr->printNodalMat(datum, lastnode, result);
                     }
-                    nodePtr = nodePtr->getNext();
-                }
-
-                compPtr = compList.getComp(0);
-                while (compPtr != NULL) {
-                    compPtr->specialPrintMat(datum, result);
-                    compPtr = compPtr->getNext();
-                }
-
-
-            //~> go down the component list and give supernode equations for all float sources (Nodal Analysis)
-                if (eqType != Modified) {
-                    compPtr = compList.getComp(0);
-                    while (compPtr != NULL) {
-                        compPtr->printSuperNodeMat(datum, lastnode, result);
-                        compPtr = compPtr->getNext();
-                    }
-                }
-
-
-                // go down the node list and give additional MNA equations
-                if (eqType == Modified) {
-                    nodePtr = nodeList.getNode(0);
-                    while (nodePtr != NULL) {
-                        if (nodePtr->getNameNum() != datum)
-                            nodePtr->printMNAMat(datum, lastnode, result);
-                        nodePtr = nodePtr->getNext();
-                    }
-                }
-
-
-
-
-                nodePtr1 = nodeList.getNode(0);
-                while (nodePtr1 != NULL) {
-                    if (nodePtr1->getNameNum() != datum) {
-                        nodePtr2 = nodeList.getNode(0);
-                        while (nodePtr2 != NULL) {
-                            if (nodePtr2->getNameNum() != datum) {
-                                nodePtr1->printJacMat(datum, nodePtr2, lastnode, eqType, jacMat);
-                            }
-                            nodePtr2 = nodePtr2->getNext();
-                        }
-                    }
-                    nodePtr1 = nodePtr1->getNext();
-                }
-
-                // go down the component list and give equations for all sources
-                compPtr = compList.getComp(0);
-                while (compPtr != NULL) {
-                    nodePtr2 = nodeList.getNode(0);
-                    compPtr2 = compList.getComp(0);
-                    while (nodePtr2 != NULL) {
-                        if (nodePtr2->getNameNum() != datum) {
-                            compPtr->specialPrintJacMat(datum, nodePtr2, lastnode, eqType, compPtr2, &specPrintJacMNA, jacMat); // ~> specPrintJacMNA is used to verify if the jacobians w.r.t. the Modified equations was already printed to print only once.
-                        }
-                        nodePtr2 = nodePtr2->getNext();
-                    }
-                    specPrintJacMNA = 0;
-                    compPtr = compPtr->getNext();
-                }
-
-
-
-                // print the Jacobians for the additional MNA equations
-                if (eqType == Modified) {
-                    nodePtr1 = nodeList.getNode(0);
-                    while (nodePtr1 != NULL) {
-                        if (nodePtr1->getNameNum() != datum) {
-                            nodePtr2 = nodeList.getNode(0);
-                            while (nodePtr2 != NULL) {
-                                if (nodePtr2->getNameNum() != datum)
-                                    nodePtr1->printJacMNAMat(datum, nodePtr2, lastnode, jacMat);
-                                nodePtr2 = nodePtr2->getNext();
-                            }
-                        }
-                        nodePtr1 = nodePtr1->getNext();
-                    }
-                }
-
-
-
-                int count = 1;
-                               //精度
-                int max = 10000;                      //最大迭代次数
-
-
-            
-                //cout << "------------------output-------------------" << endl;
-
-
-                newtonRaphson(nodeValue, number, jacMat, result, delta);   //先迭代一次,的到第一次的误差值delta
-
-
-
-                while (!isAccurate(delta, number, accurateValue)) {    //根据得到的delta判断是否满足精度要求
-                    if (count == max) break;                          //达到最大迭代次数退出
-
-                    for (int i = 0; i < number; i++) {
-                        for (int j = 0; j < number; j++) {           //每次迭代f(x)、雅可比矩阵、误差值都不同，先初始化
-                            jacMat[i + 1][j + 1] = 0.0;
-                        }
-                        result[i + 1] = 0.0;
-                        delta[i + 1] = 0.0;
-                    }
-                    count++;                                          //记录迭代次数
-
-
 
                     nodePtr = nodeList.getNode(0);
                     while (nodePtr != NULL) {
@@ -1406,7 +1305,6 @@ int main(int argc, char* argv[]) {
                         compPtr = compPtr->getNext();
                     }
 
-
                     //~> go down the component list and give supernode equations for all float sources (Nodal Analysis)
                     if (eqType != Modified) {
                         compPtr = compList.getComp(0);
@@ -1415,7 +1313,6 @@ int main(int argc, char* argv[]) {
                             compPtr = compPtr->getNext();
                         }
                     }
-
 
                     // go down the node list and give additional MNA equations
                     if (eqType == Modified) {
@@ -1426,8 +1323,6 @@ int main(int argc, char* argv[]) {
                             nodePtr = nodePtr->getNext();
                         }
                     }
-
-
 
                     nodePtr1 = nodeList.getNode(0);
                     while (nodePtr1 != NULL) {
@@ -1458,7 +1353,6 @@ int main(int argc, char* argv[]) {
                         compPtr = compPtr->getNext();
                     }
 
-
                     // print the Jacobians for the additional MNA equations
                     if (eqType == Modified) {
                         nodePtr1 = nodeList.getNode(0);
@@ -1474,27 +1368,56 @@ int main(int argc, char* argv[]) {
                             nodePtr1 = nodePtr1->getNext();
                         }
                     }
+                    Eigen::MatrixXd J = JA(jacMat, number).inverse();
+                    J = J * lambda;
+                    for (int i = 0; i < number; i++) {
+                        J(i, i) += (1 - lambda) * Gleak;
+                    }
+                    J = J.inverse();
+                    double Hk[30] = { 0 };
+                    for (int i = 0; i < number; i++) {
+                        Hk[i] = result[i + 1] * lambda + (1 - lambda) * Gleak * (nodeValue[i + 1] - a[i]);
+                    }
+                    double temp[30] = { 0 };
+                    for (int i = 0; i < number; i++) {
+                        for (int j = 0; j < number; j++) {
+                            temp[i] += J(i, j) * Hk[j];
+                        }
+                    }
+                    for (int i = 0; i < number; i++) {
+                        nodeValue[i + 1] -= temp[i];
+                    }
 
-                    newtonRaphson(nodeValue, number, jacMat, result, delta);        //在循环里继续迭代
-
-                    
                 }
+
+            
                 for (int j = 0; j < Capacitor_count; j++) {
                     double temp = nodeValue[Ca[0][j]] - nodeValue[Ca[1][j]];
-                    Vs[j].push_back(temp);                         //定义在头文件U(k)
+                    Vs[j][i+1] = temp;                         //定义在头文件U(k)
                 }
                 
             
         }
 
         //打印输出
-        for (int i = 0; i < Capacitor_count; i++) {
+        /*for (int i = 0; i < Capacitor_count; i++) {
             cout << "C" << i + 1 << ":" << endl;
-            for (int j = 0; j < Vs[i].size(); j++) {
+            for (int j = 0; j < h_count; j++) {
                 cout << Vs[i][j] << " ";
             }
             cout << endl;
+        }*/
+        //输出到文件
+        
+        ofstream outfile("./电容瞬态.txt");
+        for (int i = 0; i < Capacitor_count; i++) {
+            for (int j = 0; j < h_count; j++) {
+                outfile << Vs[i][j] << " ";
+            }
+            outfile << endl;
         }
+        cout <<"\n" << "完成" << endl;
+
        
 
     }

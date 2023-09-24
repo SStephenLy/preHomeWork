@@ -1969,7 +1969,7 @@ void Component::printMat(int nodeNum, int datum, int lastnode, double result[], 
 				result[nameNum] = result[nameNum] + value*((-nodeValue[con1.node->getNameNum()]+ Uk[con0.node->getNum()-1]) / h);
 			}
 		}
-		if (con1.node->getNum() == nodeNum) {
+		/*if (con1.node->getNum() == nodeNum) {
 
 
 			if (con1.node->getNameNum() != datum && con0.node->getNameNum() != datum) {
@@ -1981,7 +1981,7 @@ void Component::printMat(int nodeNum, int datum, int lastnode, double result[], 
 			if (con1.node->getNameNum() == datum && con0.node->getNameNum() != datum) {
 				result[nameNum] = result[nameNum] + value*((-nodeValue[con0.node->getNameNum()]+ Uk[con1.node->getNum()-1]) / h);
 			}
-		}
+		}*/
 		break;
 
 	case Inductor:
@@ -2614,11 +2614,13 @@ void Component::printJacMat(int nodeNum, int datum, int wrt, bool MNAflag, doubl
 	case Capacitor:
 		if (((con0.node->getNum() == nodeNum) && (con0.node->getNameNum() == wrt)) ||
 			((con1.node->getNum() == nodeNum) && (con1.node->getNameNum() == wrt)))
-			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] + 1;
+			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] + value/h;
 
 		else if (((con0.node->getNum() == nodeNum) && (con1.node->getNameNum() == wrt)) ||
-			((con1.node->getNum() == nodeNum) && (con0.node->getNameNum() == wrt)))
-			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] - 1;
+			((con1.node->getNum() == nodeNum) && (con0.node->getNameNum() == wrt))) 
+			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] - value/h;
+			
+		
 		else
 			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] + 0;
 		break;
