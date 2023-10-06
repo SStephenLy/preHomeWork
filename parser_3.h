@@ -1,7 +1,7 @@
 #pragma once
 //  PARSER.H
 //  Header for Parser program.
-
+#include<bits/stdc++.h>
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -18,10 +18,14 @@ const double Q = 1.60E-19;
 
 
 double nodeValue[30] = { 0.0 }, jacMat[30][30] = { 0.0 }, result[30] = { 0.0 }, minDert[30] = {0.0};
-//ĞÂÌí¼Ó
-double h, Uk[10] = {0};                 //UkÎª³õÊ¼Öµ£¬hÎª²½³¤
-vector<vector<double>> Vs;
+//æ–°æ·»åŠ 
+double Uk[10] = { 0 }, Icc[2][10] = { 0 };                 //Ukä¸ºåˆå§‹å€¼ï¼Œhä¸ºæ­¥é•¿  Iccåˆå§‹ç”µæµ
+vector<vector<double>> Vs(100);
+//vector<vector<double>> Ic(10);
 int Ca[2][10] = { 0 };
+double L[3][10] = { 0 };
+double initF[30] = { 0.0 }, preU[30] = { 0.0 }, stepSize = 0.0, stopTime = 0.0, vsourChangIndex = 0.0;
+int Vsoure[10][4]={0};
 
 enum CompType {
 	MOSFET, BJT, VSource, ISource, Inductor,
@@ -90,7 +94,7 @@ private:
 	Component* next;
 	CompType type;
 	//Connectors con0, con1, con2, con3;
-	int compNum;  //Í¬ÖÖÀàĞÍ×é¼şµÄ±àºÅ
+	int compNum;  //åŒç§ç±»å‹ç»„ä»¶çš„ç¼–å·
 	double value, temp;
 	Model* model;
 	char name[NameLength];
@@ -121,10 +125,10 @@ public:
 	void printSuperNodalMat(int datum, int lastnode, double result[], int numIndex);
 	/* */
 private:
-	Node* next;   //Á´½ÓÏÂÒ»¸ö½Úµã£¬Ë³ĞòºÍnodeListÖĞµÄË³Ğò±£³ÖÒ»ÖÂ
-	int nodeNum, conCount; //nodeNum ±íÊ¾nodeListÖĞ½ÚµãµÄ±àºÅ ´Ó1¿ªÊ¼£¬conCount±íÊ¾¸Ã½ÚµãÁ´½ÓµÄ±ßÊı
+	Node* next;   //é“¾æ¥ä¸‹ä¸€ä¸ªèŠ‚ç‚¹ï¼Œé¡ºåºå’ŒnodeListä¸­çš„é¡ºåºä¿æŒä¸€è‡´
+	int nodeNum, conCount; //nodeNum è¡¨ç¤ºnodeListä¸­èŠ‚ç‚¹çš„ç¼–å· ä»1å¼€å§‹ï¼ŒconCountè¡¨ç¤ºè¯¥èŠ‚ç‚¹é“¾æ¥çš„è¾¹æ•°
 	Connections* conList;
-	int nameNum; //ÓÃ»§¶Ô½ÚµãµÄ±àºÅË³Ğò
+	int nameNum; //ç”¨æˆ·å¯¹èŠ‚ç‚¹çš„ç¼–å·é¡ºåº
 };
 
 class NodeHead {
@@ -513,11 +517,28 @@ void Component::print(int nodeNum, ofstream& outFile, int datum, int lastnode) {
 		break;
 
 	case Inductor:
-		if (con0.node->getNum() == nodeNum)
-			outFile << " Il" << compNum << " ";
-		else if (con1.node->getNum() == nodeNum)
+		// if (con0.node->getNum() == nodeNum)
+		// 	outFile << " Il" << compNum << " ";
+		// else if (con1.node->getNum() == nodeNum)
 
-			break;
+		// 	break;
+		if (con0.node->getNum() == nodeNum) {
+			outFile << " h*(";
+			if (con0.node->getNameNum() != datum)
+				outFile << "X(" << con0.node->getNameNum() << ')';
+			if (con1.node->getNameNum() != datum)
+				outFile << "-X(" << con1.node->getNameNum() << ')';
+			outFile << ")/" << L << "+ In";
+		}
+		if (con1.node->getNum() == nodeNum) {
+			outFile << " h*(";
+			if (con1.node->getNameNum() != datum)
+				outFile << "X(" << con1.node->getNameNum() << ')';
+			if (con0.node->getNameNum() != datum)
+				outFile << "-X(" << con0.node->getNameNum() << ')';
+			outFile << ")/" << L << "+ In";
+		}
+		break;
 	};
 	return;
 }
@@ -535,15 +556,15 @@ void Component::specialPrint(ofstream& outFile, int datum) {
 			outFile << "-X(" << con1.node->getNameNum() << ')';
 		outFile << ") -" << value << ';' << endl;
 	}
-	else if (type == Inductor) {
-		outFile << endl << "F(I" << compNum << ") = ";
-		outFile << " (";
-		if (con0.node->getNameNum() != datum)
-			outFile << "X(" << con0.node->getNameNum() << ')';
-		if (con1.node->getNameNum() != datum)
-			outFile << "-X(" << con1.node->getNameNum() << ')';
-		outFile << ") " << ';' << endl;
-	}
+	// else if (type == Inductor) {
+	// 	outFile << endl << "F(I" << compNum << ") = ";
+	// 	outFile << " (";
+	// 	if (con0.node->getNameNum() != datum)
+	// 		outFile << "X(" << con0.node->getNameNum() << ')';
+	// 	if (con1.node->getNameNum() != datum)
+	// 		outFile << "-X(" << con1.node->getNameNum() << ')';
+	// 	outFile << ") " << ';' << endl;
+	// }
 }
 
 /// ~> POSSIBLE DEBUG: insert a condition with relation to the type of equation: MNA. i.e. if(typeEq = MNA) ...
@@ -1104,7 +1125,7 @@ void Component::printJac(int nodeNum, ofstream& outFile, int datum, int wrt, boo
 	case Inductor:
 		cerr << "This section is not completed" << endl
 			<< "PROGRAM ENDED ABNORMALLY!" << endl;
-		exit(0);
+		//exit(0);
 		break;
 	};
 	return;
@@ -1960,13 +1981,13 @@ void Component::printMat(int nodeNum, int datum, int lastnode, double result[], 
 
 
 			if (con0.node->getNameNum() != datum && con1.node->getNameNum() != datum) {
-				result[nameNum] = result[nameNum] + value*((nodeValue[con0.node->getNameNum()] - nodeValue[con1.node->getNameNum()]- Uk[con0.node->getNum()-1]) / h);
+				result[nameNum] = result[nameNum] + value*((nodeValue[con0.node->getNameNum()] - nodeValue[con1.node->getNameNum()]- Uk[con0.node->getNum()-1]) / stepSize);
 			}
 			if (con0.node->getNameNum() != datum && con1.node->getNameNum() == datum) {
-				result[nameNum] = result[nameNum] + value*((nodeValue[con0.node->getNameNum()]-Uk[con0.node->getNum()-1]) / h);
+				result[nameNum] = result[nameNum] + value*((nodeValue[con0.node->getNameNum()]-Uk[con0.node->getNum()]) / stepSize);
 			}
 			if (con0.node->getNameNum() == datum && con1.node->getNameNum() != datum) {
-				result[nameNum] = result[nameNum] + value*((-nodeValue[con1.node->getNameNum()]+ Uk[con0.node->getNum()-1]) / h);
+				result[nameNum] = result[nameNum] + value*((-nodeValue[con1.node->getNameNum()]+ Uk[con0.node->getNum()]) / stepSize);
 			}
 		}
 		/*if (con1.node->getNum() == nodeNum) {
@@ -1985,10 +2006,27 @@ void Component::printMat(int nodeNum, int datum, int lastnode, double result[], 
 		break;
 
 	case Inductor:
-		if (con0.node->getNum() == nodeNum) {}
+		/*if (con0.node->getNum() == nodeNum) {}
 			
 		else if (con1.node->getNum() == nodeNum)
-		{}
+		{}*/
+		if (con0.node->getNum() == nodeNum) {
+
+
+
+			if (con0.node->getNameNum() != datum && con1.node->getNameNum() != datum) {
+				result[nameNum] = result[nameNum] + stepSize * (nodeValue[con0.node->getNameNum()] - nodeValue[con1.node->getNameNum()]) / value + Icc[0][con0.node->getNum()];
+			}
+		
+		}
+		if (con1.node->getNum() == nodeNum) {
+
+
+			if (con1.node->getNameNum() != datum && con0.node->getNameNum() != datum) {
+				result[nameNum] = result[nameNum] + stepSize * (nodeValue[con1.node->getNameNum()] - nodeValue[con0.node->getNameNum()]) / value + Icc[1][con1.node->getNum()];
+			}
+			
+		}
 			break;
 	};
 	return;
@@ -2614,11 +2652,11 @@ void Component::printJacMat(int nodeNum, int datum, int wrt, bool MNAflag, doubl
 	case Capacitor:
 		if (((con0.node->getNum() == nodeNum) && (con0.node->getNameNum() == wrt)) ||
 			((con1.node->getNum() == nodeNum) && (con1.node->getNameNum() == wrt)))
-			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] + value/h;
+			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] + value/stepSize;
 
 		else if (((con0.node->getNum() == nodeNum) && (con1.node->getNameNum() == wrt)) ||
 			((con1.node->getNum() == nodeNum) && (con0.node->getNameNum() == wrt))) 
-			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] - value/h;
+			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] - value/stepSize;
 			
 		
 		else
@@ -2626,9 +2664,19 @@ void Component::printJacMat(int nodeNum, int datum, int wrt, bool MNAflag, doubl
 		break;
 
 	case Inductor:
-		cerr << "This section is not completed" << endl
+		/*cerr << "This section is not completed" << endl
 			<< "PROGRAM ENDED ABNORMALLY!" << endl;
-		exit(0);
+		exit(0);*/
+		if (((con0.node->getNum() == nodeNum) && (con0.node->getNameNum() == wrt)) ||
+			((con1.node->getNum() == nodeNum) && (con1.node->getNameNum() == wrt)))
+			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] + stepSize / value;
+
+		else if (((con0.node->getNum() == nodeNum) && (con1.node->getNameNum() == wrt)) ||
+			((con1.node->getNum() == nodeNum) && (con0.node->getNameNum() == wrt)))
+			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] - stepSize / value;
+		else
+			jacMat[fristIndex][scendIndex] = jacMat[fristIndex][scendIndex] + 0;
+		
 		break;
 	};
 	return;
