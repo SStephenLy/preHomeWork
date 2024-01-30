@@ -356,11 +356,11 @@ int main(int argc, char* argv[]) {
         << "<3>Êä³öJAC\n"
         << "<4>NRµü´ú\n"
         << "<5>Í¬Â×Çó½â\n"
-        << "<6>Î±Ë²Ì¬·ÖÎö" << endl;
+        << "<6>Î±Ë²Ì¬·ÖÎö\n" 
+        << "<7>New-Î±Ë²Ì¬\n"<< endl;
     cin >> flag;
 
-
-    // Íø±í×ª»»
+    //  Íø±í×ª»»
     if (flag == 1) {
         if (!strcmp(myOutName, "NOTHING")) {
             strcpy(myOutName, inName);
@@ -385,7 +385,7 @@ int main(int argc, char* argv[]) {
             outfile << "½Úµã " << nodePtr->getNameNum() << "     " << "ËùÁ¬Æ÷¼þÊýÎª£º" << nodePtr->getCount() << endl;
             conPtr = nodePtr->getConList();
             while (conPtr != NULL) {
-                outfile << "     " << "±àºÅ£º " << conPtr->comp->getcompNum() << "     " << "ÀàÐÍ£º " << ComponentTypeName(conPtr->comp) << "     " << "Á¬½Ó¶Ë¿Ú£º" << connectNum(conPtr->comp, nodePtr) << "     ";
+                outfile << "     " << "±àºÅ£º " << conPtr->comp->getcompNum() << "     " << "ÀàÐÍ£º" << ComponentTypeName(conPtr->comp) << "     " << "Á¬½Ó¶Ë¿Ú£º" << connectNum(conPtr->comp, nodePtr) << "     ";
                 outfile << "Ãû³Æ£º" << strComponentType(conPtr->comp) << conPtr->comp->getcompNum() << endl; 
                 outfile << "     " << "value:" << conPtr->comp->getVal() << endl;
 
@@ -417,7 +417,7 @@ int main(int argc, char* argv[]) {
             }
 
             // go down the nodal list and have components announce themselves
-            outfile1 << endl << "KCL/KVL ·½³Ì : " << endl;
+            outfile1 << endl << "KCL/KVL ·½³Ì: " << endl;
             nodePtr = nodeList.getNode(0);
             while (nodePtr != NULL) {
                 if (nodePtr->getNameNum() != datum) {
@@ -522,21 +522,21 @@ int main(int argc, char* argv[]) {
 
     }
 
-        //*****************************NRµü´ú******************************
+        //*****************************NR******************************
     if (flag == 4) {
             int number = 0;
-            double delta[30] = { 0 };                  //¸ù¾ÝN-R¹«Ê½£¬±£´æÑÅ¿É±È¾ØÕóµÄÄæ ³Ë f(x)µÄ½á¹û
+            double delta[30] = { 0 };                  //ï¿½ï¿½ï¿½ï¿½N-Rï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¿É±È¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½ï¿½ f(x)ï¿½Ä½ï¿½ï¿?
 
             cout << "ÊäÈë³õÊ¼½Úµã¸öÊý£º" << endl;
             cin >> number;
             cout << "ÊäÈë³õÊ¼½ÚµãÊýÖµ:" << endl;
             for (int i = 0; i < number; i++) {        
                 cin >> nodeValue[i + 1];              //   case2:  0.6682 0.7398 10.0 0.7325 1.49 10.0 -0.0079
-                                                      //   case2:  0.5682 0.6398 9 0.6325 1.3905 9 -0.01   ·Ç×¼È·
+                                                      //   case2:  0.5682 0.6398 9 0.6325 1.3905 9 -0.01   ï¿½ï¿½×¼È·
                                                       //   case3: 1.7718 -8.2282 -1.1066 1.4645 1.4645 0.3689 0.3689 1.3881 1.3881 10.4580 0.8934 10.6933 12.0 12.0 -0.0030 -0.0030 -0.0007 0.0003
-            }//   case1´øÈëµÄ8¸öÊýÖµ 0.7103 0.6725 10.0 0.7103 1.5 10.0 -0.0046 -0.0021
-             //   case1·Ç×¼È·   0.5 0.55 8 0.5 1 5.0 1 1
-
+            }//   case1ï¿½ï¿½ï¿½ï¿½ï¿?8ï¿½ï¿½ï¿½ï¿½Öµ 0.7103 0.6725 10.0 0.7103 1.5 10.0 -0.0046 -0.0021
+             //   case1ï¿½ï¿½×¼È·   0.5 0.55 8 0.5 1 5.0 1 1
+//double a[18] = {0.0759 0.0540 0.5308 0.7792 0.9340 0.1299 0.5688 0.4694 0.0119 0.3371 0.1622 0.7943 0.3112 0.5285 0.1656 0.6020 0.2630 0.6541};
             nodePtr = nodeList.getNode(0);
             while (nodePtr != NULL) {
                 if (nodePtr->getNameNum() != datum) {
@@ -623,8 +623,8 @@ int main(int argc, char* argv[]) {
 
 
             int count = 1;
-            double accurateValue;                //¾«¶È
-            int max = 1000;                      //×î´óµü´ú´ÎÊý
+            double accurateValue;                //ï¿½ï¿½ï¿½ï¿½
+            int max = 1000;                      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 
             cout << "ÊäÈë¾«¶È:" << endl;
@@ -633,9 +633,9 @@ int main(int argc, char* argv[]) {
 
             LU_NR(jacMat,result,minDert, number,count, accurateValue, datum,lastnode, nodeList, compList, max);
 
-            //ÍË³öÑ­»·Êä³ö½á¹û
+            //ï¿½Ë³ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-            cout << "µü´ú´ÎÊý:" << "  " << count << endl<<endl;;       //Êä³öµü´ú´ÎÊý
+            cout << "µü´ú´ÎÊý:" << "  " << count << endl<<endl;;       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
 
             cout << "½á¹û:" << endl;
             for (int i = 0; i < number; i++) {
@@ -643,7 +643,7 @@ int main(int argc, char* argv[]) {
             }
 
             /////~~~~~~
-            // cout << "result½á¹û:" << endl;
+            // cout << "resultï¿½ï¿½ï¿?:" << endl;
             // for (int i = 0; i < number; i++) {
             //     cout << "F(" << i + 1 << ") =    " << result[i + 1] << endl;
             // }
@@ -651,9 +651,9 @@ int main(int argc, char* argv[]) {
     }
 
         if(flag==5){
-            //Í¬Â×·¨Çó½â
+            //Í¬ï¿½×·ï¿½ï¿½ï¿½ï¿?
 
-            double N = 0;        //[0,1]Çø¼ä·Ö¶Î¸öÊý
+            double N = 0;        //[0,1]ï¿½ï¿½ï¿½ï¿½Ö¶Î¸ï¿½ï¿½ï¿?
             
             double result_0[30] = { 0 };
             int number = 0;
@@ -665,7 +665,10 @@ int main(int argc, char* argv[]) {
             //double a[8] = { 0.7, 0.6, 10, 0.7, 1.5, 10, -0.0040, -0.0020 };
             //double a[7] = { 0.6682, 0.7398, 10.0, 0.7325, 1.49, 10.0, -0.0079 };
             //double a[7] = { 0.5000, 0.4799, 0.9047, 0.6099, 0.6177, 0.8594, 0.8055 };
-            double a[18] = { 0.5000, 0.4799, 0.9047, 0.6099, 0.6177, 0.8594, 0.8055, 0.5767, 0.5000, 0.4799, 0.9047, 0.6099, 0.6177, 0.8594, 0.8055, 0.5767 , 0.5767, 0.5767};
+            //double a[18] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 , 0, 0};
+            double a[18] = {0.0759, 0.0540, 0.5308, 0.7792, 0.9340, 0.1299, 0.5688, 0.4694, 0.0119, 0.3371, 0.1622, 0.7943, 0.3112, 0.5285, 0.1656, 0.6020, 0.2630, 0.6541};
+            //double a[7] = {0.5828, 0.5862, 0.9258, 0.5751, 0.0100, 0.8094, 0.6088};
+            //double a[18] = { 0.5000, 0.4799, 0.9047, 0.6099, 0.6177, 0.8594, 0.8055, 0.5767, 0.5000, 0.4799, 0.9047, 0.6099, 0.6177, 0.8594, 0.8055, 0.5767 , 0.5767, 0.5767};
             double path1, lambda = 0;
             bool flag1 = true;
             cout << "\n" << "*******************************Í¬Â×·¨*******************************" << endl;
@@ -673,24 +676,25 @@ int main(int argc, char* argv[]) {
             cout << "ÊäÈë³õÊ¼Êý¾Ý¸öÊý£º" << endl;
             
             cin >> number;
-            cout << "ÊäÈëÍ¬Â×³õÊ¼²½³¤£º" << endl;
+            cout << "ÊäÈë³õÊ¼²½³¤£º" << endl;
             double h1 = 0;
             cin >> h1;
-            double accurateValue;                //¾«¶È
-            int max = 11;                      //×î´óµü´ú´ÎÊý
+            double accurateValue;                //ï¿½ï¿½ï¿½ï¿½
+            int max = 11;                      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             int sum_count = 0;
 
             cout << "ÊäÈëNRµü´ú¾«¶È:" << endl;
             cin >> accurateValue;
 
             double temp_nodeValue[30] = { 0 };
+
             for (int i = 0; i < number; i++) {  
                 nodeValue[i + 1] = a[i];  
-                temp_nodeValue[i + 1] = a[i];       //±£´æÇ°Ò»²½µÄ½ÚµãÖµ£¬³õÖµÎªaµÄÖµ     
+                temp_nodeValue[i + 1] = a[i];       //ï¿½ï¿½ï¿½ï¿½Ç°Ò»ï¿½ï¿½ï¿½Ä½Úµï¿½Öµï¿½ï¿½ï¿½ï¿½ÖµÎªaï¿½ï¿½Öµ     
             }
-            double init_lambda = 0;                     //ÉÏÒ»²½µÄlambda²½³¤
-            //cout << "ÊäÈë³õÊ¼ÊýÖµ:" << endl;
-                   //   case1´øÈëµÄ8¸öÊýÖµ 0.7103 0.6725 10.0 0.7103 1.5 10.0 -0.0046 -0.0021
+            double init_lambda = 0;                     //ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½lambdaï¿½ï¿½ï¿½ï¿½
+            //cout << "ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ö?:" << endl;
+                   //   case1ï¿½ï¿½ï¿½ï¿½ï¿?8ï¿½ï¿½ï¿½ï¿½Öµ 0.7103 0.6725 10.0 0.7103 1.5 10.0 -0.0046 -0.0021
             for (lambda = 0; lambda <= 1; ) {
                 for (int i = 0; i < number; i++) {
                     for (int j = 0; j < number; j++) {
@@ -778,12 +782,12 @@ int main(int argc, char* argv[]) {
                 }
                 
                 //
-                int count = 1;         //Ã¿´Îµü´ú´ÎÊý
+                int count = 1;         //Ã¿ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 homotopy_LU_NR(jacMat, result, minDert, number, count, accurateValue, datum, lastnode, nodeList, compList, lambda, Gleak, a, max);
                 sum_count += count;
 
 
-                //²½³¤ÅÐ¶Ï
+                //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
                 if (count < 5) {
                     for (int i = 0; i < number; i++) {
                         temp_nodeValue[i + 1] = nodeValue[i + 1];
@@ -818,11 +822,11 @@ int main(int argc, char* argv[]) {
                         flag1 = false;
                     } 
                 }
-                //lambda += h1;
+                
 
             }
-            cout << "*******************************Êä³ö*******************************" << endl;
-            cout << "\n"<<"×Üµü´ú´ÎÊý£º" <<" "<< sum_count << endl;
+            cout << "********************************Êä³ö********************************" << endl;
+            cout << "\n"<<"×Üµü´ú´ÎÊý" <<" "<< sum_count << endl;
 
             cout << "\n"<<"½á¹û:" << endl;
             for (int i = 0; i < number; i++) {
@@ -832,12 +836,12 @@ int main(int argc, char* argv[]) {
         
     
     
-    // Î±Ë²Ì¬·ÖÎö
+    // Î±Ë²Ì¬ï¿½ï¿½ï¿½ï¿½
     if (flag == 6) {
         
 
-        // //ÐÂÐÞ¸Ä
-        // cout << "*******************************Ë²Ì¬·ÖÎö*******************************" << endl;
+        // //ï¿½ï¿½ï¿½Þ¸ï¿½
+        // cout << "*******************************Ë²Ì¬ï¿½ï¿½ï¿½ï¿½*******************************" << endl;
         
         // //double a[8] = { 0.5000, 0.4799, 0.9047, 0.6099, 0.6177, 0.8594, 0.8055, 0.5767 };
         // double a[10] = { 0.7, 0.6, 10, 0.7, 1.5, 10, -0.0040, -0.0020, -0.0040, -0.0020};
@@ -853,8 +857,8 @@ int main(int argc, char* argv[]) {
         // int sum_count = 0;
         // double temp_nodeValue[30] = {0};
 
-        // int L_count = 0;                   //µç¸ÐÊýÁ¿
-        // int Capacitor_count = 0;           //µçÈÝÊýÁ¿
+        // int L_count = 0;                   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?
+        // int Capacitor_count = 0;           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         // Component* comPtr1 = compList.getComp(0);
         // while (comPtr1){
         //     if (comPtr1->getType() == Capacitor) {
@@ -884,30 +888,30 @@ int main(int argc, char* argv[]) {
         //     Vs[i].push_back(0);
         // }
         
-        // double stop_time = 0;                       //±£´æ½ØÖ¹Ê±¼ä
-        // cout << "ÇëÊäÈëÊ±¼ä²½³¤£º" << endl;
+        // double stop_time = 0;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹Ê±ï¿½ï¿?
+        // cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä²½ï¿½ï¿½ï¿½ï¿½" << endl;
         // cin >> h;
-        // cout << "ÇëÊäÈë½áÊøÊ±¼ä£º" << endl;
+        // cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ä£?" << endl;
         // cin >> stop_time;
         // double h1;
-        // cout<< "ÊäÈë³õÊ¼Í¬Â×²½³¤:"<<endl;
+        // cout<< "ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Í¬ï¿½×²ï¿½ï¿½ï¿?:"<<endl;
         // cin >> h1;
-        // /*cout << "ÊäÈë¾«¶È:" << endl;
+        // /*cout << "ï¿½ï¿½ï¿½ë¾«ï¿½ï¿½:" << endl;
         // double accurateValue;
         // cin >> accurateValue;*/
-        // cout << "ÊäÈë³õÊ¼½Úµã¸öÊý£º" << endl;
+        // cout << "ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½" << endl;
         // int number1 = 0;
         // cin >> number1;
-        // double accurateValue;                //¾«¶È
-        // int max = 100;                      //×î´óµü´ú´ÎÊý
+        // double accurateValue;                //ï¿½ï¿½ï¿½ï¿½
+        // int max = 100;                      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         // double init_lambda = 0;
         // double temp_node[30] = { 0 };
 
 
-        // cout << "ÊäÈëNRµü´ú¾«¶È:" << endl;
+        // cout << "ï¿½ï¿½ï¿½ï¿½NRï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:" << endl;
         // cin >> accurateValue;
-        // //cout << "ÊäÈë³õÊ¼½ÚµãÊýÖµ:" << endl;
-        // //for (int i = 0; i < number1; i++) {        // case1´øÈëµÄ8¸öÊýÖµ 0.7103 0.6725 10.0 0.7103 1.5 10.0 -0.0046 -0.0021
+        // //cout << "ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½Úµï¿½ï¿½ï¿½Ö?:" << endl;
+        // //for (int i = 0; i < number1; i++) {        // case1ï¿½ï¿½ï¿½ï¿½ï¿?8ï¿½ï¿½ï¿½ï¿½Öµ 0.7103 0.6725 10.0 0.7103 1.5 10.0 -0.0046 -0.0021
         // //    cin >> nodeValue[i + 1];               // 0.5000 0.4799 0.9047 0.6099 0.6177 0.8594 0.8055 0.5767
         // //}
         // for (int i = 0; i < number1; i++) {
@@ -915,16 +919,16 @@ int main(int argc, char* argv[]) {
         //     nodeValue[i + 1] = a[i];
 
         // }
-        // ofstream outfile1("./½Úµã±ä»¯.txt");      //
+        // ofstream outfile1("./ï¿½Úµï¿½ä»?.txt");      //
         // int h_count = stop_time / h;
         // for (int i = 0; i < h_count; i++) {
         //     for (int j = 0; j < Capacitor_count; j++) {
         //         //
-        //         Uk[j] = Vs[j][i];                            //¶¨ÒåÔÚÍ·ÎÄ¼þU(k)
+        //         Uk[j] = Vs[j][i];                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½Ä¼ï¿½U(k)
         //     }
         //     //for (int j = 0; j < L_count; j++) {
         //     //    //
-        //     //    Icc[j] = Ic[j][i];                            //¶¨ÒåÔÚÍ·ÎÄ¼þIc
+        //     //    Icc[j] = Ic[j][i];                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½Ä¼ï¿½Ic
         //     //}
           
         //         int number = number1;
@@ -1015,12 +1019,12 @@ int main(int argc, char* argv[]) {
         //         }
                 
         //         //
-        //         int count = 1;         //Ã¿´Îµü´ú´ÎÊý
+        //         int count = 1;         //Ã¿ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         //         homotopy_LU_NR(jacMat, result, minDert, number, count, accurateValue, datum, lastnode, nodeList, compList, lambda, Gleak, a);
         //         sum_count += count;
 
 
-        //         //²½³¤ÅÐ¶Ï
+        //         //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
         //         if (count < 5) {
         //             for (int i = 0; i < number; i++) {
         //                 temp_nodeValue[i + 1] = nodeValue[i + 1];
@@ -1048,7 +1052,7 @@ int main(int argc, char* argv[]) {
             
         //         for (int j = 0; j < Capacitor_count; j++) {
         //             double temp = nodeValue[Ca[0][j]] - nodeValue[Ca[1][j]];
-        //             Vs[j].push_back(temp);                         //¶¨ÒåÔÚÍ·ÎÄ¼þU(k)
+        //             Vs[j].push_back(temp);                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½Ä¼ï¿½U(k)
         //         }
         //         for (int j = 0; j < L_count; j++) {
         //                 double temp = nodeValue[(int)L[0][j]] - nodeValue[(int)L[1][j]];
@@ -1068,7 +1072,7 @@ int main(int argc, char* argv[]) {
             
         // }
 
-        // ofstream outfile("./µçÈÝË²Ì¬.txt");
+        // ofstream outfile("./ï¿½ï¿½ï¿½ï¿½Ë²Ì¬.txt");
         // for (int i = 0; i < Capacitor_count+L_count; i++) {
         //     for (int j = 0; j < h_count; j++) {
         //         outfile << Vs[i][j] << " ";
@@ -1076,11 +1080,13 @@ int main(int argc, char* argv[]) {
         //     outfile << endl;
         // }
   
-        // cout <<"\n" << "Íê³É" << endl;    
-        cout << "*******************************Î±Ë²Ì¬·ÖÎö*******************************" << endl;
+        // cout <<"\n" << "ï¿½ï¿½ï¿?" << endl;    
+        cout << "*******************************Î±Ë²Ì¬*******************************" << endl;
         //double a[10] = {0.7103, 0.6725, 10.0, 0.7103, 1.5, 10.0, 0, 0, -0.0046 -0.0021};
-        int L_count = 0;                   //µç¸ÐÊýÁ¿
-        int Capacitor_count = 0;           //µçÈÝÊýÁ¿
+        int L_count = 0;                   //µç¸ÐÊý
+        int Capacitor_count = 0;           //µçÈÝÊý
+        isTran = 1;      
+
         Component* comPtr1 = compList.getComp(0);
         while (comPtr1){
             if (comPtr1->getType() == Capacitor) { 
@@ -1099,24 +1105,22 @@ int main(int argc, char* argv[]) {
             }
             comPtr1 = comPtr1->getNext();
         }
-        int sum_count = 0;   //×Üµü´ú´ÎÊý
-        int number = 0;      //½Úµã¸öÊý
-        stepSize = 0.1;      //Ê±¼ä²½³¤
-        double total = 0, last_total = 0, endTime = 1e5, minStep = 1e-9, Gap = 1e-4;
-        cout << "ÊäÈë³õÊ¼½Úµã¸öÊý£º" << endl;
+        int sum_count = 0;   
+        int number = 0;      
+        stepSize = 0.001;      
+        double total = 0, endTime = 1e4, minStep = 1e-9, Gap = 1e-6;
+        cout << "ÊäÈë³õÊ¼Êý¾Ý¸öÊý" << endl;
         cin >> number;
-        double temp_nodeValue[20] = {0};
-        for(int i=0; i<number; i++){
-            nodeValue[i+1] = 0;
-        }
+
         double temp_Icc[2][10] = { 0 }, temp_Uk[10] = {0};
 
-        double accurateValue;                //¾«¶È
-        int max = 21;                       //×î´óµü´ú´ÎÊý
+        double accurateValue;                
+        int max = 22;                       
         cout << "ÊäÈëNRµü´ú¾«¶È:" << endl;
         cin >> accurateValue;
+        outfile.open("1-ptran.txt", ios::out);
         while(1){
-            //total += stepSize;
+            total += stepSize;
             if (total > endTime){
                 cout<<"Time Out!"<<endl;
                 break;
@@ -1124,11 +1128,12 @@ int main(int argc, char* argv[]) {
             if (stepSize < minStep){
                 cout<<"Stepsize too Small, Abort!"<<endl;
                 break;
-            }  
+            }
+
             
-            // for(int i=0; i<number; i++){
-            // nodeValue[i+1] = 0;
-            // }
+            for(int i=0; i<number; i++){
+                nodeValue[i+1] = 0;
+            }
             for (int i = 0; i < number; i++) {
                 for (int j = 0; j < number; j++) {
                     jacMat[i + 1][j + 1] = 0.0;
@@ -1219,82 +1224,291 @@ int main(int argc, char* argv[]) {
             LU_NR(jacMat, result, minDert, number, count, accurateValue, datum, lastnode, nodeList, compList, max);
             sum_count += count;
             
-
-            //ÅÐ¶ÏÊ±¼ä²½³¤
+            if(is_break(temp_nodeValue, nodeValue, number, Gap)) {
+                // for(int i=0; i<number; i++){
+                //     nodeValue[i+1] = temp_nodeValue[i+1];
+                // }
+                break;
+            }
+            //
             if(count <= 10){
-                if(is_break(temp_nodeValue, nodeValue, number, Gap)) break;
+                
                 for (int j = 0; j < L_count; j++) {
-                double temp = nodeValue[(int)L[0][j]] - nodeValue[(int)L[1][j]];
-                Icc[0][(int)L[0][j]] += temp * (stepSize / L[2][j]);
-                Icc[1][(int)L[1][j]] += -temp * (stepSize / L[2][j]);  
-                temp_Icc[0][(int)L[0][j]] = Icc[0][(int)L[0][j]];
-                temp_Icc[1][(int)L[1][j]] = Icc[1][(int)L[1][j]]; 
-                }
-                for (int j = 0; j < Capacitor_count; j++) {
-                //double temp = nodeValue[(int)Ca[0][j]] - nodeValue[(int)Ca[1][j]];
-                Uk[Ca[0][j]] = nodeValue[Ca[0][j]]; 
-                temp_Uk[Ca[0][j]] = Uk[Ca[0][j]];
-                }
-                last_total = total;
-                //
+                    double temp = nodeValue[(int)L[0][j]] - nodeValue[(int)L[1][j]];
+                    // Icc[0][(int)L[0][j]] += temp * (stepSize / L[2][j]);
+                    // Icc[1][(int)L[1][j]] += -temp * (stepSize / L[2][j]);  
+                    // temp_Icc[0][(int)L[0][j]] = Icc[0][(int)L[0][j]];
+                    // temp_Icc[1][(int)L[1][j]] = Icc[1][(int)L[1][j]]; 
+                    // Component* comPtrs = compList.getComp(0);
+                    // while (comPtrs != NULL) {
+                    //     if (comPtrs->getType() == Inductor) {
+
+                    //         temp_I[comPtrs->getcompNum()] = temp_I[comPtrs->getcompNum()] + stepSize * (nodeValue[comPtrs->getConVal(1)] - nodeValue[comPtrs->getConVal(0)]) / comPtrs->getVal();
+
+                    //     }
+
+                    //     comPtrs = comPtrs->getNext();
+                    // }
+                }              
+                Component* comPtrs = compList.getComp(0);
+                    while (comPtrs != NULL) {
+                        if (comPtrs->getType() == Inductor) {
+
+                            temp_I[comPtrs->getcompNum()] = temp_I[comPtrs->getcompNum()] + stepSize * (nodeValue[comPtrs->getConVal(1)] - nodeValue[comPtrs->getConVal(0)]) / comPtrs->getVal();
+
+                        }
+
+                        comPtrs = comPtrs->getNext();
+                    }
                 stepSize *= 2;
-                total += stepSize;
                 for(int i=0; i<number; i++){
                     temp_nodeValue[i+1] = nodeValue[i+1];
+                    outfile << nodeValue[i+1] << " ";
                 }
+                outfile<<endl;
             }
             else if(count <= 20){
-                if(is_break(temp_nodeValue, nodeValue, number, Gap)) break;
+                
                 for (int j = 0; j < L_count; j++) {
-                double temp = nodeValue[(int)L[0][j]] - nodeValue[(int)L[1][j]];
-                Icc[0][(int)L[0][j]] += temp * (stepSize / L[2][j]);
-                Icc[1][(int)L[1][j]] += -temp * (stepSize / L[2][j]); 
-                temp_Icc[0][(int)L[0][j]] = Icc[0][(int)L[0][j]];
-                temp_Icc[1][(int)L[1][j]] = Icc[1][(int)L[1][j]];                
+                    double temp = nodeValue[(int)L[0][j]] - nodeValue[(int)L[1][j]];
+                    // Icc[0][(int)L[0][j]] += temp * (stepSize / L[2][j]);
+                    // Icc[1][(int)L[1][j]] += -temp * (stepSize / L[2][j]); 
+                    // temp_Icc[0][(int)L[0][j]] = Icc[0][(int)L[0][j]];
+                    // temp_Icc[1][(int)L[1][j]] = Icc[1][(int)L[1][j]];                
                 }
-                for (int j = 0; j < Capacitor_count; j++) {
-                //double temp = nodeValue[(int)Ca[0][j]] - nodeValue[(int)Ca[1][j]];
-                Uk[Ca[0][j]] = nodeValue[Ca[0][j]];
-                temp_Uk[Ca[0][j]] = Uk[Ca[0][j]]; 
+                
+                Component* comPtrs = compList.getComp(0);
+                while (comPtrs != NULL) {
+                    if (comPtrs->getType() == Inductor) {
+
+                        temp_I[comPtrs->getcompNum()] = temp_I[comPtrs->getcompNum()] + stepSize * (nodeValue[comPtrs->getConVal(1)] - nodeValue[comPtrs->getConVal(0)]) / comPtrs->getVal();
+
+                    }
+
+                    comPtrs = comPtrs->getNext();
                 }
-                last_total = total;
-                total += stepSize;
                 for(int i=0; i<number; i++){
                     temp_nodeValue[i+1] = nodeValue[i+1];
+                    outfile << nodeValue[i+1] << " " ;
                 }
+                outfile<<endl;
             }
             else{
-                
-                for(int i=0; i<number; i++){
-                    nodeValue[i+1] = temp_nodeValue[i+1];
-                }
                 for (int j = 0; j < L_count; j++) {
-                Icc[0][(int)L[0][j]] = temp_Icc[0][(int)L[0][j]];
-                Icc[1][(int)L[1][j]] = temp_Icc[1][(int)L[1][j]];  
+                    // Icc[0][(int)L[0][j]] = temp_Icc[0][(int)L[0][j]];
+                    // Icc[1][(int)L[1][j]] = temp_Icc[1][(int)L[1][j]];  
                 }
-                for (int j = 0; j < Capacitor_count; j++) {
-                //double temp = nodeValue[(int)Ca[0][j]] - nodeValue[(int)Ca[1][j]];
-                Uk[Ca[0][j]] = temp_Uk[Ca[0][j]];
-                }
-                //
+                total -= stepSize;
                 stepSize /= 8;
-                total = last_total + stepSize;
+                
             }
-            
+            cout<< "\n" << "½á¹û" << endl;
+            for(int i=0; i<number; i++){
+                cout << "x" << "(" << i+1 << ")" << "=" << nodeValue[i+1]<<endl;
+            }
             //if(is_break(temp_nodeValue, nodeValue, number, Gap)) break;
 
         } 
-        cout << "\n" << "×Üµü´ú´ÎÊý£º" << sum_count <<endl;
+        cout << "\n\n" << "×Üµü´ú´ÎÊý£º" << sum_count <<endl;
         cout<< "\n" << "½á¹û£º" << endl;
         for(int i=0; i<number; i++){
             cout << "x" << "(" << i+1 << ")" << "=" << nodeValue[i+1]<<endl;
         }
     }
+
+    if(flag == 7){
+        cout<<"************************************New-Î±Ë²Ì¬************************************"<<endl;
+        outfile.open("ptran.txt", ios::out);
+        int number = 0;
+        isTran = 1;      //--------------------
+        isChangVsoure = 1;
+        vsourChangIndex = 0.1;
+        stepSize = 0.001;
+        stopTime = 1000000;
+        double Gap = 1e-6;
+        double total = 0, minStepSize = 1e-9;
+        
+        cout << "ÊäÈëÊý¾Ý¸öÊý:" << endl;
+        cin >> number;
+        for (int i = 1; i <= number; i++) {
+            nodeValue[i] = 0.0;
+        }
+
+        double accurateValue = 0.0;
+
+        cout << "ÊäÈëNRµü´ú¾«¶È:" << endl;
+        cin >> accurateValue;
+        int sum_count = 0;
+        int max = 12;
+            while (1) {
+                total += stepSize;
+                if(total > stopTime){
+                    cout<<endl<<"Time Out!"<<endl;
+                    break;
+                }
+                if(stepSize < minStepSize){
+                    cout<<endl<<"Step too Small!"<<endl;
+                    break;
+                }
+
+
+                for (int i = 1; i <= number; i++) {
+                    nodeValue[i] = 0.0;
+                }
+                for (int i = 0; i < number; i++) {
+                    for (int j = 0; j < number; j++) {
+                        jacMat[i + 1][j + 1] = 0.0;
+                    }
+                    result[i + 1] = 0.0;
+                }
+
+                nodePtr = nodeList.getNode(0);
+                while (nodePtr != NULL) {
+                    if (nodePtr->getNameNum() != datum) {
+                        nodePtr->printNodalMat(datum, lastnode, result);
+                    }
+                    nodePtr = nodePtr->getNext();
+                }
+
+                compPtr = compList.getComp(0);
+                while (compPtr != NULL) {
+                    compPtr->specialPrintMat(datum, result);
+                    compPtr = compPtr->getNext();
+                }
+
+
+                //~> go down the component list and give supernode equations for all float sources (Nodal Analysis)
+                if (eqType != Modified) {
+                    compPtr = compList.getComp(0);
+                    while (compPtr != NULL) {
+                        compPtr->printSuperNodeMat(datum, lastnode, result);
+                        compPtr = compPtr->getNext();
+                    }
+                }
+
+                // go down the node list and give additional MNA equations
+                if (eqType == Modified) {
+                    nodePtr = nodeList.getNode(0);
+                    while (nodePtr != NULL) {
+                        if (nodePtr->getNameNum() != datum)
+                            nodePtr->printMNAMat(datum, lastnode, result);
+                        nodePtr = nodePtr->getNext();
+                    }
+                }
+
+                nodePtr1 = nodeList.getNode(0);
+                while (nodePtr1 != NULL) {
+                    if (nodePtr1->getNameNum() != datum) {
+                        nodePtr2 = nodeList.getNode(0);
+                        while (nodePtr2 != NULL) {
+                            if (nodePtr2->getNameNum() != datum) {
+                                nodePtr1->printJacMat(datum, nodePtr2, lastnode, eqType, jacMat);
+                            }
+                            nodePtr2 = nodePtr2->getNext();
+                        }
+                    }
+                    nodePtr1 = nodePtr1->getNext();
+                }
+
+                // go down the component list and give equations for all sources
+                compPtr = compList.getComp(0);
+                while (compPtr != NULL) {
+                    nodePtr2 = nodeList.getNode(0);
+                    compPtr2 = compList.getComp(0);
+                    while (nodePtr2 != NULL) {
+                        if (nodePtr2->getNameNum() != datum) {
+                            compPtr->specialPrintJacMat(datum, nodePtr2, lastnode, eqType, compPtr2, &specPrintJacMNA, jacMat); // ~> specPrintJacMNA is used to verify if the jacobians w.r.t. the Modified equations was already printed to print only once.
+                        }
+                        nodePtr2 = nodePtr2->getNext();
+                    }
+                    specPrintJacMNA = 0;
+                    compPtr = compPtr->getNext();
+                }
+
+                // print the Jacobians for the additional MNA equations
+                if (eqType == Modified) {
+                    nodePtr1 = nodeList.getNode(0);
+                    while (nodePtr1 != NULL) {
+                        if (nodePtr1->getNameNum() != datum) {
+                            nodePtr2 = nodeList.getNode(0);
+                            while (nodePtr2 != NULL) {
+                                if (nodePtr2->getNameNum() != datum)
+                                    nodePtr1->printJacMNAMat(datum, nodePtr2, lastnode, jacMat);
+                                nodePtr2 = nodePtr2->getNext();
+                            }
+                        }
+                        nodePtr1 = nodePtr1->getNext();
+                    }
+                }
+
+                
+                int count_num = 1;
+                LU_NR(jacMat, result, minDert, number, count_num, accurateValue, datum, lastnode, nodeList, compList, max);
+                sum_count += count_num;
+
+                if (is_break(temp_nodeValue, nodeValue, number, Gap)) {
+                    break;
+                }
+
+                if (is_break(temp_nodeValue, nodeValue, number, 1e-3)) {
+                    //outfile<< total << " ";
+                    // for (int i = 1; i <= number; i++) {
+                    //     outfile <<  nodeValue[i] << " ";
+                    // }
+                    // outfile<<endl;
+
+                    if (vsourChangIndex < 1)
+                        vsourChangIndex += 0.1;
+                    else
+                        vsourChangIndex = 1;
+
+                }
+
+                if (count_num < 5) {
+                    stepSize = stepSize * 2;
+                    for (int i = 1; i <= number; i++) {
+                        temp_nodeValue[i] = nodeValue[i];
+                    }
+                    cout<<"µ±Ç°ÀÛ¼ÆÊ±¼ä£º" << total <<"    " << "µ±Ç°²½³¤£º"<<stepSize<<endl;
+                    for (int i = 1; i <= number; i++) {
+                        outfile <<  nodeValue[i] << " ";
+                    }
+                    outfile<<endl;
+                }
+                else if (count_num > 10) {
+                    total -= stepSize;
+                    stepSize = stepSize / 8;
+                    cout<<"µ±Ç°ÀÛ¼ÆÊ±¼ä£º" << total <<"    " << "µ±Ç°²½³¤£º"<<stepSize<<endl;
+                
+                }
+                else {
+                    for (int i = 1; i <= number; i++) {
+                        temp_nodeValue[i] = nodeValue[i];
+                    }
+                    cout<<"µ±Ç°ÀÛ¼ÆÊ±¼ä£º" << total <<"    " << "µ±Ç°²½³¤£º"<<stepSize<<endl;
+                    for (int i = 1; i <= number; i++) {
+                        outfile <<  nodeValue[i] << " ";
+                    }
+                    outfile<<endl;
+                }
+
+
+
+            }
+            outfile.close();
+            cout<< endl <<"×Üµü´ú´ÎÊý£º "<< sum_count <<endl;
+            cout<< endl << "½á¹û£º "<< endl;
+            for (int i = 1; i <= number; i++) {
+                cout << "x" << "(" << i << ")=" << nodeValue[i] <<endl;
+            }
+            
+    }
+    
     system("pause");
     return 0;
 }
 
-//ÅÐ¶Ïptran½áÊø
+//ï¿½Ð¶ï¿½ptranï¿½ï¿½ï¿½ï¿½
 bool is_break(double temp_nodeValue[], double nodeValue[], int number, double Gap){
     bool flag = true;
     for(int i=0; i<number; i++){
@@ -1306,7 +1520,7 @@ bool is_break(double temp_nodeValue[], double nodeValue[], int number, double Ga
 }
 
 
-// ¶¨ÒåÄ¿±êº¯ÊýÏòÁ¿ F(x)
+// ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½êº¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ F(x)
 Eigen::VectorXd FX(double result[], int number) {
     Eigen::VectorXd F(number);
     for (int i = 0; i < number; i++) {
@@ -1315,7 +1529,7 @@ Eigen::VectorXd FX(double result[], int number) {
     return F;
 }
 
-// ¶¨ÒåÄ¿±êº¯ÊýµÄÑÅ¿É±È¾ØÕó J(x)²¢·µ»ØÄæ
+// ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½êº¯ï¿½ï¿½ï¿½ï¿½ï¿½Å¿É±È¾ï¿½ï¿½ï¿½ J(x)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 Eigen::MatrixXd JA(double jacMat[][30], int number) {
     Eigen::MatrixXd J(number, number);
     for (int i = 0; i < number; i++) {
@@ -1327,13 +1541,13 @@ Eigen::MatrixXd JA(double jacMat[][30], int number) {
     return J.inverse();
 }
 
-// Å£¶Ù-À­·òÉ­µü´úº¯Êý
+// Å£ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½É­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void newtonRaphson(double nodeValue[], int number, double jacMat[][30], double result[], double delta[]) {
 
     Eigen::MatrixXd J = JA(jacMat, number);
     Eigen::VectorXd F = FX(result, number);
 
-    for (int i = 0; i < number; i++) {             //¸ù¾ÝNRµü´ú¹ØÏµÊ½£¬±£´æÑÅ¿É±È¾ØÕóµÄÄæ ³Ë F(x)µÄ½á¹û
+    for (int i = 0; i < number; i++) {             //ï¿½ï¿½ï¿½ï¿½NRï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÊ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¿É±È¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½ï¿½ F(x)ï¿½Ä½ï¿½ï¿?
         for (int j = 0; j < number; j++) {
             delta[i] += J(i, j) * F(j);
         }
@@ -1344,7 +1558,7 @@ void newtonRaphson(double nodeValue[], int number, double jacMat[][30], double r
     }
 }
 
-//Í¬Â×ÀïµÄÅ£¶Ùµü´ú
+//Í¬ï¿½ï¿½ï¿½ï¿½ï¿½Å£ï¿½Ùµï¿½ï¿½ï¿?
 void newtonRaphson1(double nodeValue[], int number, double jacMat[][30], double result[], double delta[], double lambda, double Gleak, double a[]) {
 
     Eigen::MatrixXd J = JA(jacMat, number).inverse();
@@ -1367,7 +1581,7 @@ void newtonRaphson1(double nodeValue[], int number, double jacMat[][30], double 
         nodeValue[i + 1] -= temp[i];
     }
 }
-//Í¬Â×ÀïµÄÅ£¶Ùµü´úLU½â·¨
+//Í¬ï¿½ï¿½ï¿½ï¿½ï¿½Å£ï¿½Ùµï¿½ï¿½ï¿½LUï¿½â·¨
 void homotopy_LU_NR(double jacMat[][30], double result[], double minDert[], int number, int &count, double accurateValue, int datum, int lastnode, NodeHead nodeList, CompHead compList, double lambda, double Gleak, double a[], int max){
     if(count > max) return;
     Component* compPtr, * compPtr2;
@@ -1511,7 +1725,7 @@ void homotopy_LU_NR(double jacMat[][30], double result[], double minDert[], int 
 
 
 
-// ÅÐ¶Ï¾«¶È
+// ï¿½Ð¶Ï¾ï¿½ï¿½ï¿½
 bool isAccurate(double delta[], int num, double acc) {
     bool re = true;
     for (int i = 0; i < num; i++) {
@@ -1523,13 +1737,13 @@ bool isAccurate(double delta[], int num, double acc) {
 
 }
 
-//Í¬Â×µü´ú
+//Í¬ï¿½×µï¿½ï¿½ï¿½
 void homotopy(double nodeValue[], int number, double jacMat[][30], double result[], double delta[], double ratio, const double result_0[]) {
 
     Eigen::MatrixXd J = JA(jacMat, number);
     Eigen::VectorXd F = FX(result, number);
 
-    for (int i = 0; i < number; i++) {             //¸ù¾ÝNRµü´ú¹ØÏµÊ½£¬±£´æÑÅ¿É±È¾ØÕóµÄÄæ ³Ë F(x)µÄ½á¹û
+    for (int i = 0; i < number; i++) {             //ï¿½ï¿½ï¿½ï¿½NRï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÏµÊ½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¿É±È¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿? ï¿½ï¿½ F(x)ï¿½Ä½ï¿½ï¿?
         for (int j = 0; j < number; j++) {
             delta[i] += J(i, j) * (F(j) + ratio * result_0[j + 1]);
         }
@@ -1540,7 +1754,7 @@ void homotopy(double nodeValue[], int number, double jacMat[][30], double result
     }
 }
 
-//¼òµ¥Ë²Ì¬·ÖÎö
+//ï¿½ï¿½Ë²Ì¬ï¿½ï¿½ï¿½ï¿½
 void simpleTran(double Uc[], double h, double E, double C, double R, double stop_time, int& size) {
     for (int i = 0; i < (int)(stop_time / h); i++) {
         Uc[i + 1] = h * E / (R * C) + (1 - h / (R * C)) * Uc[i];
@@ -1566,7 +1780,7 @@ void convertArray(double jacMat[][30], double A[][30], double result[], double y
 
 //LU
 void Fun(double A[][30] , double x[], double b[], int n) {
-    //³õÊ¼»¯LºÍU¾ØÕó
+    //ï¿½ï¿½Ê¼ï¿½ï¿½Lï¿½ï¿½Uï¿½ï¿½ï¿½ï¿½
     double L[30][30] = { 0 }, U[30][30] = { 0 }, y[30] = {0};
     for (int j = 0; j < n; j++) {
         U[0][j] = A[0][j];
@@ -1580,7 +1794,7 @@ void Fun(double A[][30] , double x[], double b[], int n) {
        
         
     }
-    //¼ÆËã L¡¢U ¾ØÕó
+    //ï¿½ï¿½ï¿½ï¿½ Lï¿½ï¿½U ï¿½ï¿½ï¿½ï¿½
     for (int k = 1; k < n; k++) {
         double temp = 0;
         for (int j = k; j < n; j++) {
@@ -1601,7 +1815,7 @@ void Fun(double A[][30] , double x[], double b[], int n) {
             
         }
     }
-    //Çó¾ØÕóy
+    //ï¿½ï¿½ï¿½ï¿½ï¿½y
     y[0] = b[0];
     for (int i = 1; i < n; i++) {
         double temp = 0;
@@ -1610,7 +1824,7 @@ void Fun(double A[][30] , double x[], double b[], int n) {
         }
         y[i] = b[i] - temp;
     }
-    //Çó¾ØÕóx
+    //ï¿½ï¿½ï¿½ï¿½ï¿½x
     if (U[n - 1][n - 1] != 0.0) {
         x[n - 1] = y[n - 1] / U[n - 1][n - 1];
     }
@@ -1628,7 +1842,7 @@ void Fun(double A[][30] , double x[], double b[], int n) {
 
 }
 
-//LU·Ö½âµÄÅ£¶Ùµü´ú
+//LUï¿½Ö½ï¿½ï¿½Å£ï¿½Ùµï¿½ï¿½ï¿?
 
 void LU_NR(double jacMat[][30], double result[], double minDert[], int number, int &count, double accurateValue, int datum, int lastnode, NodeHead nodeList, CompHead compList, int max){
     if(count > max) return;
@@ -1864,5 +2078,7 @@ int connectNum(Component* comPtr, Node* nodePtr) {
         return 1;
     }
 }
+
+
 
 #endif
